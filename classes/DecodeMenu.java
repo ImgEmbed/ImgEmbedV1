@@ -77,7 +77,7 @@ public class DecodeMenu extends JFrame {
     {
         Picture targetPictureObj = new Picture(targetPicture);
         try {
-            String secret = targetPictureObj.decodeBinaryToString();
+            String secret = targetPictureObj.decodeBinary();
             int numOfBytes = secret.length() / 8;
             byte[] bytes = new byte[numOfBytes];
             for(int i = 0; i < numOfBytes; i++)

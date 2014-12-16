@@ -547,65 +547,48 @@ public class Picture extends SimplePicture
         }
     }
     
-    public boolean encodeBinary(byte[] message)
+    public boolean encodeBinary(String message)
     {
         Pixel[][] pixels = this.getPixels2D();
         
-        for (int row = 0; row < pixels.length; row++)
-        {
-            for (int col = 0; col < pixels[0].length; col++)
-            { 
-                if(pixels[row][col].getRed() % 2 != 0)
-                    if(pixels[row][col].getRed() == 255)
-                        pixels[row][col].setRed(254);
-                    else
-                        pixels[row][col].setRed(pixels[row][col].getRed() - 1);
-                
-                if(pixels[row][col].getBlue() % 2 != 0)
-                    if(pixels[row][col].getBlue() == 255)
-                        pixels[row][col].setBlue(254);
-                    else
-                        pixels[row][col].setBlue(pixels[row][col].getBlue() - 1);
-                
-                if(pixels[row][col].getGreen() % 2 != 0)
-                    if(pixels[row][col].getGreen() == 255)
-                        pixels[row][col].setGreen(254);
-                    else
-                        pixels[row][col].setGreen(pixels[row][col].getGreen() - 1);
-            }
-        }
+        if(message.length() > 3 * pixels.length * pixels[0].length - 1)
+            return false;
         
         int messageIndex = 0;
         for(Pixel[] curPixRow : pixels)
             for(Pixel curPix : curPixRow)
             {   
-                if(messageIndex >= message.length)
+                if(messageIndex >= message.length())
                 {
-                    curPix.setRed(curPix.getRed() + 1);
+                    makeOdd(curPix, 0);
                     return true;
                 }
-                else if(message[messageIndex] == (byte)1)
-                    curPix.setRed(curPix.getRed() + 1);
+                else if(message.charAt(messageIndex) == '0')
+                    makeEven(curPix, 0);
+                else if(message.charAt(messageIndex) == '1')
+                    makeOdd(curPix, 0);
                     
                 messageIndex++;  
-                  
-                if(messageIndex >= message.length)
+                if(messageIndex >= message.length())
                 {
-                    curPix.setGreen(curPix.getGreen() + 1);
+                    makeOdd(curPix, 1);
                     return true;
                 }
-                else if(message[messageIndex] == (byte)1)
-                    curPix.setGreen(curPix.getGreen() + 1);
+                else if(message.charAt(messageIndex) == '0')
+                    makeEven(curPix, 1);
+                else if(message.charAt(messageIndex) == '1')
+                    makeOdd(curPix, 1);
                     
                 messageIndex++;
-                    
-                if(messageIndex >= message.length)
+                if(messageIndex >= message.length())
                 {
-                    curPix.setBlue(curPix.getBlue() + 1);
+                    makeOdd(curPix, 2);
                     return true;
                 }
-                else if(message[messageIndex] == (byte)1)
-                    curPix.setBlue(curPix.getBlue() + 1);
+                else if(message.charAt(messageIndex) == '0')
+                    makeEven(curPix, 2);
+                else if(message.charAt(messageIndex) == '1')
+                    makeOdd(curPix, 2);
                     
                 messageIndex++;
             }
@@ -613,111 +596,104 @@ public class Picture extends SimplePicture
         return true;
     }
     
-    public boolean encodeBinary(String binaryMessage)
+    public void makeOdd(Pixel input, int color)
     {
-        Pixel[][] pixels = this.getPixels2D();
-        if(binaryMessage.length() > 3 * pixels.length * pixels[0].length - 1)
-            return false;
-        
-        byte[] message = new byte[binaryMessage.length()];
-        
-        for(int i = 0; i < binaryMessage.length(); i++)
-            if(binaryMessage.charAt(i) == '0')
-                message[i] = 0;
-            else if(binaryMessage.charAt(i) == '1')
-                message[i] = 1;
-            else
-                return false;
+        switch(color)
+        {
+            case 0:
+                if(input.getRed() % 2 == 1)
+                    return;
                 
-        return encodeBinary(message);
+                input.setRed(input.getRed() + 1);
+            break;
+            case 1:
+                if(input.getGreen() % 2 == 1)
+                    return;
+                
+                input.setGreen(input.getGreen() + 1);
+            break;
+            case 2:
+                if(input.getBlue() % 2 == 1)
+                    return;
+                
+                input.setBlue(input.getBlue() + 1);
+            break;
+            default:
+            break;
+        }
     }
     
-    public byte[] decodeBinary()
+    public void makeEven(Pixel input, int color)
+    {
+        switch(color)
+        {
+            case 0:
+                if(input.getRed() % 2 == 0)
+                    return;
+                
+                input.setRed(input.getRed() - 1);
+            break;
+            case 1:
+                if(input.getGreen() % 2 == 0)
+                    return;
+                
+                input.setGreen(input.getGreen() - 1);
+            break;
+            case 2:
+                if(input.getBlue() % 2 == 0)
+                    return;
+                
+                input.setBlue(input.getBlue() - 1);
+            break;
+            default:
+            break;
+        }
+    }
+    
+    public String decodeBinary()
     {
         Pixel[][] pixels = this.getPixels2D();
-        List<Byte> message = new ArrayList<Byte>();
+        StringBuilder message = new StringBuilder("");
         int messageSize = 0;
         
         for(int row = 0; row < pixels.length; row++)
             for(int col = 0; col < pixels[0].length; col++)
             {
-                if(pixels[row][col].getRed() % 2 == 0)
-                    message.add(new Byte((byte)0));
-                else
-                {
-                    message.add(new Byte((byte)1));
-                    messageSize = message.size()-1;
-                }
+                message.append(pixels[row][col].getRed() % 2);
+                if(pixels[row][col].getRed() % 2 == 1)
+                    messageSize = message.length()-1;
                 
-                if(pixels[row][col].getGreen() % 2 == 0)
-                    message.add(new Byte((byte)0));
-                else
-                {
-                    message.add(new Byte((byte)1));
-                    messageSize = message.size()-1;
-                }
+                message.append(pixels[row][col].getGreen() % 2);
+                if(pixels[row][col].getGreen() % 2 == 1)
+                    messageSize = message.length()-1;
                 
-                if(pixels[row][col].getBlue() % 2 == 0)
-                    message.add(new Byte((byte)0));
-                else
-                {
-                    message.add(new Byte((byte)1));
-                    messageSize = message.size()-1;
-                }
+                message.append(pixels[row][col].getBlue() % 2);
+                if(pixels[row][col].getBlue() % 2 == 1)
+                    messageSize = message.length()-1;
             }
-            
-        byte[] out = new byte[messageSize];
-        for(int i=0; i<messageSize; i++)
-            out[i] = message.get(i);
 
-        return out;
-    }
-    
-    public String decodeBinaryToString()
-    {
-        byte[] decoded = this.decodeBinary();
-            
-        StringBuilder out = new StringBuilder("");
-        for(int i=0; i<decoded.length; i++)
-            out.append(decoded[i]);
-
-        return out.toString();
+        return message.substring(0, messageSize);
     }
 
-    public byte[] toBinaryArray()
+    public String toBinaryString()
     {
         //http://www.mkyong.com/java/how-to-convert-bufferedimage-to-byte-in-java/
         //http://exampledepot.8waytrips.com/egs/java.math/Bytes2Str.html
-        byte[] imageInByte = null;
-        byte[] out = null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write( this.getBufferedImage(), "png", baos );
             baos.flush();
-            imageInByte = baos.toByteArray();
+            byte[] imageInByte = baos.toByteArray();
             baos.close();
             
             StringBuilder sb = new StringBuilder("");
             for(byte x : imageInByte)
                 sb.append(byteToBitString(x));
-            
-            out = new byte[sb.length()];
-            for(int i=0; i<sb.length(); i++)
-               out[i] = sb.charAt(i) == '0' ? (byte)0 : (byte)1;
+                
+            return sb.toString();
         } catch(Exception e) {}
         
-        return out;
-    }
-    
-    public String toBinaryString()
-    {
-        byte[] binaryArray = this.toBinaryArray();
-        
-        StringBuilder sb = new StringBuilder("");
-        for(byte x : binaryArray)
-            sb.append(x==(byte)0?'0':'1');
-        
-        return sb.toString();
+        return null;
     }
     
     private String byteToBitString(byte in)

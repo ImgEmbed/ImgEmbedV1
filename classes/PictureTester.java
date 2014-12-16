@@ -201,6 +201,7 @@ public class PictureTester
     
     public static void testEncode()
     {
+        /*
         Picture target = new Picture("720p.jpg");
         Picture secret = new Picture("robot.jpg");
         
@@ -209,10 +210,12 @@ public class PictureTester
               target.write("encoded.png");
               
         target.explore();
+        */
     }
     
     public static void testDecode()
     {
+        /*
         //http://www.mkyong.com/java/how-to-convert-byte-to-bufferedimage-in-java/
         Picture target = new Picture("Output.png");
         //System.out.println(target.decodeBinaryToString());
@@ -225,16 +228,16 @@ public class PictureTester
                 
             InputStream in = new ByteArrayInputStream(bytes);
             BufferedImage bImageFromConvert = ImageIO.read(in);
-            /*byte dataToWrite[] = secret_BigInt.toByteArray();
-            FileOutputStream out = new FileOutputStream("decode");
-            out.write(dataToWrite);
-            out.close();*/
+            //byte dataToWrite[] = secret_BigInt.toByteArray();
+            //FileOutputStream out = new FileOutputStream("decode");
+            //out.write(dataToWrite);
+            //out.close();
             ImageIO.write(bImageFromConvert, "png", new File("decoded.png"));
             Picture secret_Picture = new Picture("decoded.png");
             
             secret_Picture.explore();
         }
-        catch(Exception e){System.out.println(e);}
+        catch(Exception e){System.out.println(e);}*/
     }
 
     /** Main method for testing.  Every class can have a main
