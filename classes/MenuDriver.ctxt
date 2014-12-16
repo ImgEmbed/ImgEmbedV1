@@ -5,4 +5,6 @@ comment1.params=
 comment1.target=void\ init()
 comment2.params=id\ x\ y
 comment2.target=void\ switchMenu(int,\ int,\ int)
-numComments=3
+comment3.params=
+comment3.target=int[]\ getSize()
+numComments=4

@@ -6,6 +6,8 @@ public class MenuDriver implements MenuSwitcher{
     JFrame encodeFrame = null;
     JFrame decodeFrame = null;
     
+    private static final int[] size = {480, 200};
+    
     public static void main(String args[])
     {
         MenuDriver driver = new MenuDriver();
@@ -49,5 +51,10 @@ public class MenuDriver implements MenuSwitcher{
             default:
             break;
         }
+    }
+    
+    public int[] getSize()
+    {
+        return size;
     }
 }

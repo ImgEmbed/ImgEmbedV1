@@ -15,7 +15,7 @@ public class MainMenu extends JFrame {
     public MainMenu(MenuSwitcher parent) {
         this.parent = parent;
         setTitle("ImgEmbed Main Menu");
-        setSize(372, 200);
+        setSize(parent.getSize()[0], parent.getSize()[1]);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

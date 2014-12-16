@@ -17,7 +17,7 @@ public class EncodeMenu extends JFrame {
     public EncodeMenu(MenuSwitcher parent) {
         this.parent = parent;
         setTitle("ImgEmbed Encoder");
-        setSize(372, 200);
+        setSize(parent.getSize()[0], parent.getSize()[1]);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

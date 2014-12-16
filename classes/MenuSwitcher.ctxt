@@ -1,4 +1,6 @@
 #BlueJ class context
-comment0.params=id\ x\ y
-comment0.target=void\ switchMenu(int,\ int,\ int)
-numComments=1
+comment0.params=
+comment0.target=int[]\ getSize()
+comment1.params=id\ x\ y
+comment1.target=void\ switchMenu(int,\ int,\ int)
+numComments=2
